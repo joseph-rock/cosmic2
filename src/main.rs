@@ -1,5 +1,8 @@
 
+use std::fs::File;
+
 use std::collections::HashMap;
+use std::io::Write;
 use indicatif::ProgressBar;
 
 #[macro_use]
@@ -69,7 +72,7 @@ fn preload_sum(n: i32) -> i32 {
     if ATOMIC_LENGTH.contains_key(&under_hundred) {
         total += ATOMIC_LENGTH[&under_hundred];
     } else {
-        total += ATOMIC_LENGTH[&(&under_hundred / &10 * &10)] + ATOMIC_LENGTH[&(&under_hundred % &10)];
+        total += ATOMIC_LENGTH[&(under_hundred / 10 * 10)] + ATOMIC_LENGTH[&(under_hundred % 10)];
     }
 
     return total;
@@ -94,7 +97,7 @@ fn is_num(num: i32) -> i32 {
     return total;
 }
 
-fn cosmic_chain(num: i32) {
+fn cosmic_chain(num: i32) -> String {
     let mut curr = num;
     let mut next = is_num(curr);
     let mut text = format!("num={curr}\n");
@@ -104,15 +107,19 @@ fn cosmic_chain(num: i32) {
         curr = next;
         next = is_num(curr);
     }
-    text.push_str("4 is cosmic\n----");
-    println!("{text}");
+    text.push_str("4 is cosmic\n----\n");
+    return text;
 }
 
-fn main() {
+fn main() -> std::io::Result<()> {
+    let mut file = File::create("cosmic.log")?;
+
     let pb = ProgressBar::new(1000000);
     for i in 1..1_000_001 {
-        cosmic_chain(i);
+        let text = cosmic_chain(i);
+        file.write(text.as_bytes())?;
         pb.inc(1);
     }
-    pb.finish_with_message("done!")
+    pb.finish_with_message("done!");
+    Ok(())
 }
