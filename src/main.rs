@@ -48,6 +48,14 @@ lazy_static! {
             (5 , 11) // quadrillion
         ]);
     };
+
+    static ref PRELOAD: HashMap<i32, i32> = {
+        let mut map = HashMap::new();
+        for i in 0..1000 {
+            map.insert(i, total_group(i));
+        }
+        return map;
+    };
 }
 
 fn num_groups(num: i32) -> Vec<i32> {
@@ -86,7 +94,7 @@ fn is_num(n: i32) -> i32 {
     let mut i = 0;
 
     for group in groups {
-        total += total_group(group);
+        total += PRELOAD[&group];
 
         if i > 0 && group > 0 {
             total += MAGNITUDE[&i];
