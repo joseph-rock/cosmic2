@@ -1,6 +1,8 @@
+
+use std::collections::HashMap;
+
 #[macro_use]
 extern crate lazy_static;
-use std::collections::HashMap;
 
 lazy_static! {
     static ref ATOMIC_LENGTH: HashMap<i32, i32> = {
@@ -48,7 +50,7 @@ lazy_static! {
     };
 }
 
-fn group_num(num: i32) -> Vec<i32> {
+fn num_groups(num: i32) -> Vec<i32> {
     let mut groups: Vec<i32> = vec![];
     let mut curr = num;
 
@@ -61,14 +63,14 @@ fn group_num(num: i32) -> Vec<i32> {
 }
 
 fn total_group(n: i32) -> i32 {
-    let mut total = 0;
+    let mut total: i32 = 0;
 
-    let num_hundreds = n / 100;
+    let num_hundreds: i32 = n / 100;
     if num_hundreds > 0 {
         total += ATOMIC_LENGTH[&num_hundreds] + MAGNITUDE[&0];
     }
 
-    let under_hundred = n % 100;
+    let under_hundred: i32 = n % 100;
     if ATOMIC_LENGTH.contains_key(&under_hundred) {
         total += ATOMIC_LENGTH[&under_hundred];
     } else {
@@ -78,23 +80,38 @@ fn total_group(n: i32) -> i32 {
     return total;
 }
 
+fn is_num(n: i32) -> i32 {
+    let groups: Vec<i32> = num_groups(n);
+    let mut total = 0;
+    let mut i = 0;
 
+    for group in groups {
+        total += total_group(group);
 
+        if i > 0 && group > 0 {
+            total += MAGNITUDE[&i];
+        }
+        i += 1;
+    }
 
+    return total;
+}
 
+fn cosmic_chain(num: i32) {
+    let mut curr = num;
+    let mut next = is_num(curr);
 
+    while curr != 4 {
+        println!("{curr} is {next}");
+        curr = next;
+        next = is_num(curr);
+    }
+    println!("4 is cosmic");
+    println!("----")
+}
 
 fn main() {
-    // let _a = atomic_length();
-    // let _m = magnitude();
-
-    // for (key, val) in a.iter() {
-    //     println!("key: {key} val: {val}");
-    // }
-
-    // let foo = num_groups(1314683415);
-    // println!("{:?}", foo);
-
-    let foo = total_group(420);
-    println!("{foo}");
+    for i in 1..1000001 {
+        cosmic_chain(i);
+    }
 }
