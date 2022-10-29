@@ -1,9 +1,8 @@
-
 use std::fs::File;
 
+use indicatif::{ProgressIterator, ProgressStyle};
 use std::collections::HashMap;
 use std::io::Write;
-use indicatif::ProgressBar;
 
 #[macro_use]
 extern crate lazy_static;
@@ -41,7 +40,7 @@ lazy_static! {
             (90 , 6)
         ]);
 
-    static ref MAGNITUDE: HashMap<i32, i32> = 
+    static ref MAGNITUDE: HashMap<i32, i32> =
         HashMap::from([
             (0 , 7), // hundred
             (1 , 8), // thousand
@@ -61,14 +60,14 @@ lazy_static! {
 }
 
 fn preload_sum(n: i32) -> i32 {
-    let mut total: i32 = 0;
+    let mut total = 0;
 
-    let num_hundreds: i32 = n / 100;
+    let num_hundreds = n / 100;
     if num_hundreds > 0 {
         total += ATOMIC_LENGTH[&num_hundreds] + MAGNITUDE[&0];
     }
 
-    let under_hundred: i32 = n % 100;
+    let under_hundred = n % 100;
     if ATOMIC_LENGTH.contains_key(&under_hundred) {
         total += ATOMIC_LENGTH[&under_hundred];
     } else {
@@ -93,7 +92,7 @@ fn is_num(num: i32) -> i32 {
         i += 1;
         curr = curr / 1000;
     }
-    
+
     return total;
 }
 
@@ -113,13 +112,12 @@ fn cosmic_chain(num: i32) -> String {
 
 fn main() -> std::io::Result<()> {
     let mut file = File::create("cosmic.log")?;
+    let style = ProgressStyle::with_template("eta:{eta} {bar:40.white} {pos:>7}/{len:7} {msg} [{elapsed}]")
+        .unwrap()
+        .progress_chars("##-");
 
-    let pb = ProgressBar::new(1000000);
-    for i in 1..1_000_001 {
-        let text = cosmic_chain(i);
-        file.write(text.as_bytes())?;
-        pb.inc(1);
+    for i in (1..1_000_001).progress_with_style(style) {
+        file.write(cosmic_chain(i).as_bytes())?;
     }
-    pb.finish_with_message("done!");
     Ok(())
 }
