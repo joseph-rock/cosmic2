@@ -1,63 +1,61 @@
 use std::fs::File;
-
-use indicatif::{ProgressIterator, ProgressStyle};
 use std::collections::HashMap;
 use std::io::Write;
+use once_cell::sync::Lazy;
+use indicatif::{ProgressIterator, ProgressStyle};
 
-#[macro_use]
-extern crate lazy_static;
 
-lazy_static! {
-    static ref ATOMIC_LENGTH: HashMap<i32, i32> =
-        HashMap::from([
-            (0  , 0),
-            (1  , 3),
-            (2  , 3),
-            (3  , 5),
-            (4  , 4),
-            (5  , 4),
-            (6  , 3),
-            (7  , 5),
-            (8  , 5),
-            (9  , 4),
-            (10 , 3),
-            (11 , 6),
-            (12 , 6),
-            (13 , 8),
-            (14 , 8),
-            (15 , 7),
-            (16 , 7),
-            (17 , 9),
-            (18 , 8),
-            (19 , 7),
-            (20 , 6),
-            (30 , 6),
-            (40 , 5),
-            (50 , 5),
-            (60 , 5),
-            (70 , 7),
-            (80 , 6),
-            (90 , 6)
-        ]);
+static ATOMIC_LENGTH: Lazy<HashMap<i32, i32>> = Lazy::new(|| {
+    HashMap::from([
+        (0  , 0),
+        (1  , 3),
+        (2  , 3),
+        (3  , 5),
+        (4  , 4),
+        (5  , 4),
+        (6  , 3),
+        (7  , 5),
+        (8  , 5),
+        (9  , 4),
+        (10 , 3),
+        (11 , 6),
+        (12 , 6),
+        (13 , 8),
+        (14 , 8),
+        (15 , 7),
+        (16 , 7),
+        (17 , 9),
+        (18 , 8),
+        (19 , 7),
+        (20 , 6),
+        (30 , 6),
+        (40 , 5),
+        (50 , 5),
+        (60 , 5),
+        (70 , 7),
+        (80 , 6),
+        (90 , 6)
+    ])
+});
 
-    static ref MAGNITUDE: HashMap<i32, i32> =
-        HashMap::from([
-            (0 , 7), // hundred
-            (1 , 8), // thousand
-            (2 , 7), // million
-            (3 , 7), // billion
-            (4 , 8), // trillion
-            (5 , 11) // quadrillion
-        ]);
+static MAGNITUDE: Lazy<HashMap<i32, i32>> = Lazy::new(|| {
+    HashMap::from([
+        (0 , 7), // hundred
+        (1 , 8), // thousand
+        (2 , 7), // million
+        (3 , 7), // billion
+        (4 , 8), // trillion
+        (5 , 11) // quadrillion
+    ])
+});
 
-    static ref PRELOAD: HashMap<i32, i32> = {
-        let mut map = HashMap::new();
-        for i in 0..1000 {
-            map.insert(i, preload_sum(i));
-        }
-        return map;
-    };
-}
+static PRELOAD: Lazy<HashMap<i32, i32>> = Lazy::new(|| {
+    let mut map = HashMap::with_capacity(1000);
+    for i in 0..1000 {
+        map.insert(i, preload_sum(i));
+    }
+    return map;
+});
 
 fn preload_sum(n: i32) -> i32 {
     let mut total = 0;
