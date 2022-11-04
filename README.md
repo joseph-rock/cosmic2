@@ -12,7 +12,7 @@ A cosmic number is a number in which the english spelling has the same amount of
   
 ## What is a cosmic chain?
 
-Any number not cosmic can be chained together, inevetabally reaching 4.
+Non-cosmic numbers can be chained together, inevetabally reaching 4.
 
 > 1 is 3 // length of "one" = 3  
 > 3 is 5 // length of "three" = 5  
@@ -43,7 +43,7 @@ Numbers can also be assigned a "magnitude"
 
 > hundred, thousand, million, billion ...
 
-This program calculates "hundred" as the only magnitude that can only be associated with an integer from 1 - 9. All others can be associated with any integer from 1 - 999.
+This program calculates "hundred" as a magnitude that can only be associated with an integer from 1 - 9. Any other magnitude can be associated with an integer from 1 - 999.
 
 > Example: 1600
 >
