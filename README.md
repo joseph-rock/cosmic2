@@ -14,7 +14,7 @@ A cosmic number is a number in which the english spelling has the same amount of
 
 Non-cosmic numbers can be chained together, inevetabally reaching 4.
 
-> 1 is 3 // length of "one" = 3
+> 1 is 3 // length of "one" = 3  
 > 3 is 5 // length of "three" = 5  
 > 5 is 4 // length of "five" = 4  
 > 4 is cosmic
