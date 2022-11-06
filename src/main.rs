@@ -5,51 +5,51 @@ use once_cell::sync::Lazy;
 use indicatif::{ProgressIterator, ProgressStyle};
 
 
-static ATOMIC_LENGTH: Lazy<HashMap<u32, u32>> = Lazy::new(|| {
+static ATOMIC_LENGTH: Lazy<HashMap<usize, usize>> = Lazy::new(|| {
     HashMap::from([
         (0  , 0),
-        (1  , 3),
-        (2  , 3),
-        (3  , 5),
-        (4  , 4),
-        (5  , 4),
-        (6  , 3),
-        (7  , 5),
-        (8  , 5),
-        (9  , 4),
-        (10 , 3),
-        (11 , 6),
-        (12 , 6),
-        (13 , 8),
-        (14 , 8),
-        (15 , 7),
-        (16 , 7),
-        (17 , 9),
-        (18 , 8),
-        (19 , 7),
-        (20 , 6),
-        (30 , 6),
-        (40 , 5),
-        (50 , 5),
-        (60 , 5),
-        (70 , 7),
-        (80 , 6),
-        (90 , 6)
+        (1  , "one".len()),
+        (2  , "two".len()),
+        (3  , "three".len()),
+        (4  , "four".len()),
+        (5  , "five".len()),
+        (6  , "six".len()),
+        (7  , "seven".len()),
+        (8  , "eight".len()),
+        (9  , "nine".len()),
+        (10 , "ten".len()),
+        (11 , "eleven".len()),
+        (12 , "twelve".len()),
+        (13 , "thirteen".len()),
+        (14 , "fourteen".len()),
+        (15 , "fifteen".len()),
+        (16 , "sixteen".len()),
+        (17 , "seventeen".len()),
+        (18 , "eighteen".len()),
+        (19 , "nineteen".len()),
+        (20 , "twenty".len()),
+        (30 , "thirty".len()),
+        (40 , "forty".len()),
+        (50 , "fifty".len()),
+        (60 , "sixty".len()),
+        (70 , "seventy".len()),
+        (80 , "eighty".len()),
+        (90 , "ninety".len())
     ])
 });
 
-static MAGNITUDE: Lazy<HashMap<u32, u32>> = Lazy::new(|| {
+static MAGNITUDE: Lazy<HashMap<usize, usize>> = Lazy::new(|| {
     HashMap::from([
-        (0 , 7), // hundred
-        (1 , 8), // thousand
-        (2 , 7), // million
-        (3 , 7), // billion
-        (4 , 8), // trillion
-        (5 , 11) // quadrillion
+        (0 , "hundred".len()),
+        (1 , "thousand".len()),
+        (2 , "million".len()),
+        (3 , "billion".len()),
+        (4 , "trillion".len()),
+        (5 , "quadrillion".len())
     ])
 });
 
-static PRELOAD: Lazy<HashMap<u32, u32>> = Lazy::new(|| {
+static PRELOAD: Lazy<HashMap<usize, usize>> = Lazy::new(|| {
     let mut map = HashMap::with_capacity(1000);
     for i in 0..1000 {
         map.insert(i, preload_sum(i));
@@ -57,7 +57,7 @@ static PRELOAD: Lazy<HashMap<u32, u32>> = Lazy::new(|| {
     return map;
 });
 
-fn preload_sum(n: u32) -> u32 {
+fn preload_sum(n: usize) -> usize {
     let mut total = 0;
 
     let num_hundreds = n / 100;
@@ -75,7 +75,7 @@ fn preload_sum(n: u32) -> u32 {
     return total;
 }
 
-fn is_num(num: u32) -> u32 {
+fn is_num(num: usize) -> usize {
     let mut curr = num;
     let mut total = 0;
     let mut i = 0;
@@ -94,7 +94,7 @@ fn is_num(num: u32) -> u32 {
     return total;
 }
 
-fn cosmic_chain(num: u32) -> String {
+fn cosmic_chain(num: usize) -> String {
     let mut curr = num;
     let mut text = format!("num={curr}\n");
 
