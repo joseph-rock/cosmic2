@@ -5,47 +5,47 @@ use once_cell::sync::Lazy;
 use indicatif::{ProgressIterator, ProgressStyle};
 
 
-static ATOMIC_LENGTH: Lazy<HashMap<usize, usize>> = Lazy::new(|| {
+static ATOMIC_LENGTH: Lazy<HashMap<usize, &str>> = Lazy::new(|| {
     HashMap::from([
-        (0  , 0),
-        (1  , "one".len()),
-        (2  , "two".len()),
-        (3  , "three".len()),
-        (4  , "four".len()),
-        (5  , "five".len()),
-        (6  , "six".len()),
-        (7  , "seven".len()),
-        (8  , "eight".len()),
-        (9  , "nine".len()),
-        (10 , "ten".len()),
-        (11 , "eleven".len()),
-        (12 , "twelve".len()),
-        (13 , "thirteen".len()),
-        (14 , "fourteen".len()),
-        (15 , "fifteen".len()),
-        (16 , "sixteen".len()),
-        (17 , "seventeen".len()),
-        (18 , "eighteen".len()),
-        (19 , "nineteen".len()),
-        (20 , "twenty".len()),
-        (30 , "thirty".len()),
-        (40 , "forty".len()),
-        (50 , "fifty".len()),
-        (60 , "sixty".len()),
-        (70 , "seventy".len()),
-        (80 , "eighty".len()),
-        (90 , "ninety".len())
+        (0  , ""),
+        (1  , "one"),
+        (2  , "two"),
+        (3  , "three"),
+        (4  , "four"),
+        (5  , "five"),
+        (6  , "six"),
+        (7  , "seven"),
+        (8  , "eight"),
+        (9  , "nine"),
+        (10 , "ten"),
+        (11 , "eleven"),
+        (12 , "twelve"),
+        (13 , "thirteen"),
+        (14 , "fourteen"),
+        (15 , "fifteen"),
+        (16 , "sixteen"),
+        (17 , "seventeen"),
+        (18 , "eighteen"),
+        (19 , "nineteen"),
+        (20 , "twenty"),
+        (30 , "thirty"),
+        (40 , "forty"),
+        (50 , "fifty"),
+        (60 , "sixty"),
+        (70 , "seventy"),
+        (80 , "eighty"),
+        (90 , "ninety")
     ])
 });
 
-static MAGNITUDE: Lazy<HashMap<usize, usize>> = Lazy::new(|| {
+static MAGNITUDE: Lazy<HashMap<usize, &str>> = Lazy::new(|| {
     HashMap::from([
-        (0 , "hundred".len()),
-        (1 , "thousand".len()),
-        (2 , "million".len()),
-        (3 , "billion".len()),
-        (4 , "trillion".len()),
-        (5 , "quadrillion".len())
+        (0 , "hundred"),
+        (1 , "thousand"),
+        (2 , "million"),
+        (3 , "billion"),
+        (4 , "trillion"),
+        (5 , "quadrillion")
     ])
 });
 
@@ -62,14 +62,14 @@ fn preload_sum(n: usize) -> usize {
 
     let num_hundreds = n / 100;
     if num_hundreds > 0 {
-        total += ATOMIC_LENGTH[&num_hundreds] + MAGNITUDE[&0];
+        total += ATOMIC_LENGTH[&num_hundreds].len() + MAGNITUDE[&0].len();
     }
 
     let under_hundred = n % 100;
     if ATOMIC_LENGTH.contains_key(&under_hundred) {
-        total += ATOMIC_LENGTH[&under_hundred];
+        total += ATOMIC_LENGTH[&under_hundred].len();
     } else {
-        total += ATOMIC_LENGTH[&(under_hundred / 10 * 10)] + ATOMIC_LENGTH[&(under_hundred % 10)];
+        total += ATOMIC_LENGTH[&(under_hundred / 10 * 10)].len() + ATOMIC_LENGTH[&(under_hundred % 10)].len();
     }
 
     return total;
@@ -84,7 +84,7 @@ fn is_num(num: usize) -> usize {
         let group = curr % 1000;
         total += PRELOAD[&group];
         if i > 0 && group > 0 {
-            total += MAGNITUDE[&i];
+            total += MAGNITUDE[&i].len();
         }
 
         i += 1;
